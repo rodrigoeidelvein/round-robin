@@ -1,0 +1,25 @@
+quantum = 5;
+
+const init = [
+  ["Rodrigo", 5],
+  ["Claudio", 15],
+  ["Thiago", 7],
+  ["Fernando", 12],
+  ["Leonardo", 17]
+];
+
+const result = [
+  ["Rodrigo", 5],
+  ["Claudio", 15],
+  ["Thiago", 7],
+  ["Fernando", 12],
+  ["Leonardo", 17],
+  ["Claudio", 10],
+  ["Thiago", 2],
+  ["Fernando", 7],
+  ["Leonardo", 12],
+  ["Claudio", 5],
+  ["Fernando", 2],
+  ["Leonardo", 7],
+  ["Leonardo", 2]
+];

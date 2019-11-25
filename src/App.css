@@ -1,0 +1,15 @@
+@import "~antd/dist/antd.css";
+
+.header-page {
+  text-align: center;
+  background: #ccc;
+}
+
+.header-page__title {
+  margin-top: 10px;
+  color: #ccc;
+}
+
+.ant-form-item-children .ant-input-number {
+  width: 110px;
+}
