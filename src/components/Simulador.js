@@ -76,7 +76,7 @@ class Simulador extends Component {
       temp.key = index;
       return temp;
     });
-    debugger;
+
     this.setState({ result: queueWithKeys }, () => {
       this.processQueue();
     });
