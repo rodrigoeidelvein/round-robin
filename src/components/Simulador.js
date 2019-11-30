@@ -39,7 +39,6 @@ class Simulador extends Component {
   // Ele irá criar uma nova fila enquanto estiver produtos a serem processados pelo caixa
   formatQueue = queue => {
     const { quantum } = this.props;
-    // debugger;
     let newQueue = [...queue];
     let updatedQueue = JSON.parse(JSON.stringify(queue));
     let pointer = 0;
@@ -56,7 +55,7 @@ class Simulador extends Component {
       pointer++;
 
       // Verifica se o ponteira está na última posição da fila para reiniciar o loop
-      if (pointer == updatedQueue.length) {
+      if (pointer >= updatedQueue.length) {
         pointer = 0;
       }
 
@@ -66,18 +65,21 @@ class Simulador extends Component {
       }
     }
 
-    this.setState({ result: newQueue });
+    // this.setState({ result: newQueue });
     return newQueue;
   };
 
   componentDidMount() {
     const formattedQueue = this.formatQueue(this.props.queue);
-
-    this.setState({ result: formattedQueue }, () => {
+    const queueWithKeys = formattedQueue.map((pos, index) => {
+      var temp = Object.assign({}, pos);
+      temp.key = index;
+      return temp;
+    });
+    debugger;
+    this.setState({ result: queueWithKeys }, () => {
       this.processQueue();
     });
-
-    this.processQueue();
   }
 
   async processQueue() {

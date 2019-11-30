@@ -114,7 +114,7 @@ class Setup extends Component {
             <Button
               type="primary"
               key="simulator"
-              onClick={this.runSimulation}
+              onClick={() => this.runSimulation()}
               block
               disabled={this.state.list.length >= 1 && this.state.quantum ? false : true}
             >
