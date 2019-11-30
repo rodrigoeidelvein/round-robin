@@ -1,10 +1,18 @@
 import React, { Component } from "react";
 import { Form, Input, InputNumber, Row, Col, Tooltip, Button, Table, Popconfirm } from "antd";
 
+const mockData = [
+  { nome: "Rodrigo", itens: 5, key: 1 },
+  { nome: "Claudio", itens: 15, key: 2 },
+  { nome: "Thigao", itens: 7, key: 3 },
+  { nome: "Fernando", itens: 12, key: 4 },
+  { nome: "Leonardo", itens: 17, key: 5 }
+];
+
 class Setup extends Component {
   constructor() {
     super();
-    this.state = { itens: 0, nome: "", list: [], quantum: "" };
+    this.state = { itens: 0, nome: "", list: [], quantum: 3 };
 
     this.columns = [
       {
@@ -64,8 +72,8 @@ class Setup extends Component {
   };
 
   runSimulation = () => {
-    this.props.updateStatus('running');
-  }
+    this.props.updateStatus("running");
+  };
 
   render() {
     return (
@@ -105,6 +113,7 @@ class Setup extends Component {
           <Col span={6} offset={9}>
             <Button
               type="primary"
+              key="simulator"
               onClick={this.runSimulation}
               block
               disabled={this.state.list.length >= 1 && this.state.quantum ? false : true}

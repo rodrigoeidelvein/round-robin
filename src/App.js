@@ -4,7 +4,6 @@ import Instructions from "./components/Instructions";
 import Setup from "./components/Setup";
 import Simulador from "./components/Simulador";
 import { Layout, Typography } from "antd";
-import { throwStatement } from "@babel/types";
 
 const { Header, Content, Footer } = Layout;
 const { Title } = Typography;
@@ -21,9 +20,9 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // queue: []
-      queue: mockData,
-      quantum: 3,
+      queue: [],
+      // queue: mockData,
+      quantum: "",
       status: "initial"
     };
   }
@@ -50,7 +49,7 @@ class App extends Component {
             </Title>
           </Header>
           <Content>
-            <Instructions></Instructions>
+            {/* <Instructions></Instructions> */}
             {this.isSimulationRunning() ? (
               <Simulador queue={this.state.queue} quantum={this.state.quantum}></Simulador>
             ) : (

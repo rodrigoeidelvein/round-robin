@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Row, Col, List, Badge, Progress, Typography, Card, Tooltip } from "antd";
+import { Row, Col, List, Badge, Progress, Typography, Card, Tooltip, Result, Button } from "antd";
 
 class Simulador extends Component {
   constructor(props) {
@@ -7,66 +7,12 @@ class Simulador extends Component {
     this.state = {
       currentProcess: { nome: "" },
       progress: 0,
-      result: [
-        {
-          nome: "Rodrigo",
-          itens: 5
-        },
-        {
-          nome: "Claudio",
-          itens: 15
-        },
-        {
-          nome: "Thiago",
-          itens: 7
-        },
-        {
-          nome: "Fernando",
-          itens: 12
-        },
-        {
-          nome: "Leonardo",
-          itens: 17
-        },
-        {
-          nome: "Claudio",
-          itens: 10
-        },
-        {
-          nome: "Thiago",
-          itens: 2
-        },
-        {
-          nome: "Fernando",
-          itens: 7
-        },
-        {
-          nome: "Leoanardo",
-          itens: 12
-        },
-        {
-          nome: "Claudio",
-          itens: 5
-        },
-        {
-          nome: "Fernando",
-          itens: 2
-        },
-        {
-          nome: "Leonardo",
-          itens: 7
-        },
-        {
-          nome: "Leonardo",
-          itens: 2
-        }
-      ]
+      result: []
     };
   }
 
   updateProgress = currentProcess => {
     const { quantum } = this.props;
-    debugger;
     const executionTime = currentProcess.itens > quantum ? quantum : currentProcess.itens;
     const speed = 15;
     let running = 0;
@@ -89,8 +35,48 @@ class Simulador extends Component {
     });
   };
 
+  // Formata a fila para ser processada pelo escalonador de processos.
+  // Ele irá criar uma nova fila enquanto estiver produtos a serem processados pelo caixa
+  formatQueue = queue => {
+    const { quantum } = this.props;
+    // debugger;
+    let newQueue = [...queue];
+    let updatedQueue = JSON.parse(JSON.stringify(queue));
+    let pointer = 0;
+    let flag = true;
+    while (flag) {
+      // Diminui os produtos de acordo com o quantum definido no passo anterior.
+      let updatedObject = Object.assign(updatedQueue[pointer], { itens: updatedQueue[pointer].itens - quantum });
+      if (updatedObject.itens > 0) {
+        newQueue.push({ ...updatedObject });
+      } else {
+        updatedQueue.splice(pointer, 1);
+      }
+
+      pointer++;
+
+      // Verifica se o ponteira está na última posição da fila para reiniciar o loop
+      if (pointer == updatedQueue.length) {
+        pointer = 0;
+      }
+
+      // Caso não estiver mais pessoas na fila, o loop é interrompido.
+      if (!updatedQueue.length) {
+        flag = false;
+      }
+    }
+
+    this.setState({ result: newQueue });
+    return newQueue;
+  };
+
   componentDidMount() {
-    // this.updateProgress(:);
+    const formattedQueue = this.formatQueue(this.props.queue);
+
+    this.setState({ result: formattedQueue }, () => {
+      this.processQueue();
+    });
+
     this.processQueue();
   }
 
@@ -99,14 +85,18 @@ class Simulador extends Component {
       const currentObj = this.state.result[0];
       this.setState({ currentProcess: currentObj });
 
-      const progress = await this.updateProgress(currentObj);
+      await this.updateProgress(currentObj);
       this.setState({ result: this.state.result.slice(1) });
     }
   }
 
-  render() {
-    return (
-      <div>
+  reloadPage = () => {
+    window.location.reload();
+  };
+
+  shouldRender() {
+    if (this.state.result.length) {
+      return (
         <Row>
           <Col span={4} offset={2}>
             <List
@@ -134,8 +124,22 @@ class Simulador extends Component {
             </Card>
           </Col>
         </Row>
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div>
+          <Result
+            status="success"
+            title="Simulação concluída com sucesso"
+            extra={<Button onClick={() => this.reloadPage()}>Reiniciar</Button>}
+          ></Result>
+        </div>
+      );
+    }
+  }
+
+  render() {
+    return <div>{this.shouldRender()}</div>;
   }
 }
 
