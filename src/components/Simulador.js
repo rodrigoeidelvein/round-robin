@@ -35,60 +35,28 @@ class Simulador extends Component {
     });
   };
 
-  // Formata a fila para ser processada pelo escalonador de processos.
-  // Ele irá criar uma nova fila enquanto estiver produtos a serem processados pelo caixa
-  formatQueue = queue => {
-    const { quantum } = this.props;
-    let newQueue = [...queue];
-    let updatedQueue = JSON.parse(JSON.stringify(queue));
-    let pointer = 0;
-    let flag = true;
-    while (flag) {
-      // Diminui os produtos de acordo com o quantum definido no passo anterior.
-      let updatedObject = Object.assign(updatedQueue[pointer], { itens: updatedQueue[pointer].itens - quantum });
-      if (updatedObject.itens > 0) {
-        newQueue.push({ ...updatedObject });
-      } else {
-        updatedQueue.splice(pointer, 1);
-      }
-
-      pointer++;
-
-      // Verifica se o ponteira está na última posição da fila para reiniciar o loop
-      if (pointer >= updatedQueue.length) {
-        pointer = 0;
-      }
-
-      // Caso não estiver mais pessoas na fila, o loop é interrompido.
-      if (!updatedQueue.length) {
-        flag = false;
-      }
-    }
-
-    // this.setState({ result: newQueue });
-    return newQueue;
-  };
-
   componentDidMount() {
-    const formattedQueue = this.formatQueue(this.props.queue);
-    const queueWithKeys = formattedQueue.map((pos, index) => {
-      var temp = Object.assign({}, pos);
-      temp.key = index;
-      return temp;
-    });
-
-    this.setState({ result: queueWithKeys }, () => {
+    this.setState({ result: this.props.queue }, () => {
       this.processQueue();
     });
   }
 
   async processQueue() {
+    const { quantum } = this.props;
     while (this.state.result.length > 0) {
       const currentObj = this.state.result[0];
       this.setState({ currentProcess: currentObj });
 
       await this.updateProgress(currentObj);
-      this.setState({ result: this.state.result.slice(1) });
+
+      Object.assign(currentObj, { itens: currentObj.itens - quantum });
+
+      if (currentObj.itens > 0) {
+        this.setState({ result: this.state.result.slice(1) });
+        this.setState({ result: [...this.state.result, currentObj] })
+      } else {
+        this.setState({ result: this.state.result.slice(1) });
+      }
     }
   }
 
