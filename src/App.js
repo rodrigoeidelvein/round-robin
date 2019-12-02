@@ -45,7 +45,7 @@ class App extends Component {
         <Layout className="layout">
           <Header className="header-page">
             <Title level={2} className="header-page__title">
-              Simulador de Super Mercado
+              Supermercado Infotech
             </Title>
           </Header>
           <Content>

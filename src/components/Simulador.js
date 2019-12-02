@@ -86,11 +86,11 @@ class Simulador extends Component {
           <Col span={5} offset={5}>
             <Typography.Title level={3}>Execução</Typography.Title>
             <Progress percent={this.state.progress} type="circle"></Progress>
-            <Typography.Title level={4}>{this.state.currentProcess.nome}</Typography.Title>
+            <Typography.Title level={4}>{this.state.currentProcess.nome} - {this.state.currentProcess.itens}</Typography.Title>
           </Col>
           <Col span={6} offset={1}>
             <Card title="Informações" style={{ width: "100%" }}>
-              <p>Quantum: {this.props.quantum}</p>
+              <p>Máx. de itens (Quantum): {this.props.quantum}</p>
             </Card>
           </Col>
         </Row>

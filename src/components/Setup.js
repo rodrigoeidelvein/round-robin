@@ -104,7 +104,7 @@ class Setup extends Component {
             <Table pagination={false} columns={this.columns} dataSource={this.state.list}></Table>
           </Col>
           <Col span={6} offset={2}>
-            <Form.Item label="Quantum">
+            <Form.Item label="Máx. de itens (Quantum)">
               <InputNumber size="large" id="quantum" placeholder="Quantum" onChange={this.handleQuantum}></InputNumber>
             </Form.Item>
           </Col>
